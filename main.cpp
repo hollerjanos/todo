@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Flag.h"
+#include "FlagManager.h"
 
 void listTasks() {
     std::cout << "Task 1" << std::endl;
@@ -17,13 +17,13 @@ void printUsage() {
 }
 
 int main(int argc, char *argv[]) {
-    Flag flags;
+    FlagManager flagManager;
 
-    flags.addFlag("--help", printUsage);
-    flags.addFlag("--list", listTasks);
+    flagManager.addFlag("--help", printUsage);
+    flagManager.addFlag("--list", listTasks);
 
     if (argc == 2) {
-        if (!flags.runFlag(argv[1])) {
+        if (!flagManager.runFlag(argv[1])) {
             printUsage();
         }
     } else {

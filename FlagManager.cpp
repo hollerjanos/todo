@@ -1,13 +1,13 @@
-#include "Flag.h"
+#include "FlagManager.h"
 
-void Flag::addFlag(
+void FlagManager::addFlag(
     const std::string &name,
     const std::function<void()> &callback
 ) {
     this->flags[name] = callback;
 }
 
-bool Flag::runFlag(const std::string &name) const {
+bool FlagManager::runFlag(const std::string &name) const {
     auto it = this->flags.find(name);
 
     if (it != this->flags.end()) {

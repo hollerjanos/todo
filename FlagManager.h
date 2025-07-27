@@ -1,12 +1,12 @@
-#ifndef FLAG_H
-#define FLAG_H
+#ifndef FLAG_MANAGER_H
+#define FLAG_MANAGER_H
 
 #include <iostream>
 #include <map>
 #include <string>
 #include <functional>
 
-class Flag {
+class FlagManager {
 private:
     std::map<std::string, std::function<void()>> flags;
 
