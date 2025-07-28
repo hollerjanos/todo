@@ -16,10 +16,10 @@ private:
     void save() const;
 public:
     TaskManager();
-    void add(
+    void append(
         const int id,
         const std::string &description,
-        const bool isCompleted = false
+        const bool completed = false
     );
     void add();
     void printTasks() const;

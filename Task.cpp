@@ -3,15 +3,23 @@
 Task::Task(
     const int id,
     const std::string &description,
-    const bool isCompleted
+    const bool completed
 ) {
     this->id = id;
     this->description = description;
-    this->isCompleted = isCompleted;
+    this->completed = completed;
+}
+
+int Task::getId() const {
+    return this->id;
 }
 
 std::string Task::getDescription() const {
     return this->description;
+}
+
+bool Task::getCompleted() const {
+    return this->completed;
 }
 
 nlohmann::json Task::getObject() const {
@@ -19,7 +27,7 @@ nlohmann::json Task::getObject() const {
 
     json["id"] = this->id;
     json["description"] = this->description;
-    json["isCompleted"] = this->isCompleted;
+    json["completed"] = this->completed;
 
     return json;
 }

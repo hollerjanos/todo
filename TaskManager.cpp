@@ -1,5 +1,6 @@
 #include "TaskManager.h"
 #include "external/json.hpp"
+#include <string>
 
 void TaskManager::load() {
     std::ifstream file("data.json");
@@ -7,7 +8,7 @@ void TaskManager::load() {
     file.close();
 
     for (const nlohmann::json &task : data) {
-        this->add(task["id"], task["description"], task["isCompleted"]);
+        this->append(task["id"], task["description"], task["completed"]);
     }
 }
 
@@ -27,29 +28,39 @@ TaskManager::TaskManager() {
     this->load();
 }
 
-void TaskManager::add(
+void TaskManager::append(
     const int id,
     const std::string &description,
-    const bool isCompleted
+    const bool completed
 ) {
-    this->tasks.push_back(Task(id, description, isCompleted));
+    this->tasks.push_back(Task(id, description, completed));
 }
 
 void TaskManager::add() {
     std::string description;
 
     std::cout << "Description of the Task: ";
-    std::cin >> description;
+    std::getline(std::cin, description);
 
     const int id = this->tasks.size() + 1;
 
-    this->add(id, description, false);
+    this->append(id, description, false);
 
     this->save();
 }
 
 void TaskManager::printTasks() const {
+    std::cout << "Open tasks: " << std::endl;
     for (const Task &task : this->tasks) {
-        std::cout << "Description: " << task.getDescription() << std::endl;
+        if (!task.getCompleted()) {
+            std::cout << task.getId() << ": " << task.getDescription() << std::endl;
+        }
+    }
+
+    std::cout << std::endl << "Completed tasks: " << std::endl;
+    for (const Task &task : this->tasks) {
+        if (task.getCompleted()) {
+            std::cout << task.getId() << ": " << task.getDescription() << std::endl;
+        }
     }
 }

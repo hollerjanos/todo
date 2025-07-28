@@ -8,11 +8,15 @@ class Task {
 private:
     int id;
     std::string description;
-    bool isCompleted;
+    bool completed;
 
 public:
-    Task(const int id, const std::string &description, const bool isCompleted);
+    Task(const int id, const std::string &description, const bool completed);
+
+    int getId() const;
     std::string getDescription() const;
+    bool getCompleted() const;
+
     nlohmann::json getObject() const;
 };
 
