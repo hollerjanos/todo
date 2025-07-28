@@ -36,19 +36,6 @@ void TaskManager::append(
     this->tasks.push_back(Task(id, description, completed));
 }
 
-void TaskManager::add() {
-    std::string description;
-
-    std::cout << "Description of the Task: ";
-    std::getline(std::cin, description);
-
-    const int id = this->tasks.size() + 1;
-
-    this->append(id, description, false);
-
-    this->save();
-}
-
 void TaskManager::printTasks() const {
     std::cout << "Open tasks: " << std::endl;
     for (const Task &task : this->tasks) {
@@ -62,5 +49,41 @@ void TaskManager::printTasks() const {
         if (task.getCompleted()) {
             std::cout << task.getId() << ": " << task.getDescription() << std::endl;
         }
+    }
+}
+
+void TaskManager::add() {
+    std::string description;
+
+    std::cout << "Description of the Task: ";
+    std::getline(std::cin, description);
+
+    const int id = this->tasks.size() + 1;
+
+    this->append(id, description, false);
+
+    this->save();
+}
+
+void TaskManager::remove() {
+    int id;
+
+    std::cout << "ID of the Task: ";
+    std::cin >> id;
+
+    std::vector<Task>::iterator iterator = std::find_if(
+        this->tasks.begin(),
+        this->tasks.end(),
+        [&id](const Task &task){return task.getId() == id;}
+    );
+
+    if (iterator != this->tasks.end()) {
+        this->tasks.erase(iterator);
+
+        this->save();
+
+        std::cout << "Task has been removed!" << std::endl;
+    } else {
+        std::cout << "Invalid ID given!" << std::endl;
     }
 }

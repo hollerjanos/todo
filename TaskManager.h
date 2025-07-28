@@ -21,8 +21,9 @@ public:
         const std::string &description,
         const bool completed = false
     );
-    void add();
     void printTasks() const;
+    void add();
+    void remove();
 };
 
 #endif

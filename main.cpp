@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     flagManager.addFlag("--help", printUsage);
     flagManager.addFlag("--list", [&](){taskManager.printTasks();});
     flagManager.addFlag("--add", [&](){taskManager.add();});
+    flagManager.addFlag("--remove", [&](){taskManager.remove();});
 
     if (argc == 2) {
         if (!flagManager.runFlag(argv[1])) {
