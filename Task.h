@@ -2,19 +2,18 @@
 #define TASK_H
 
 #include <string>
+#include "external/json.hpp"
 
 class Task {
 private:
     int id;
-    std::string title;
     std::string description;
     bool isCompleted;
-    std::string createdAt;
-    std::string completedAt;
 
 public:
-    Task(const std::string &title, const std::string &description);
+    Task(const int id, const std::string &description, const bool isCompleted);
     std::string getDescription() const;
+    nlohmann::json getObject() const;
 };
 
 #endif

@@ -13,13 +13,11 @@ void printUsage() {
 
 int main(int argc, char *argv[]) {
     TaskManager taskManager;
-    taskManager.addTask("Test1", "Leiras 1");
-    taskManager.addTask("Test2", "Leiras 2");
-    taskManager.addTask("Test3", "Leiras 3");
 
     FlagManager flagManager;
     flagManager.addFlag("--help", printUsage);
     flagManager.addFlag("--list", [&](){taskManager.printTasks();});
+    flagManager.addFlag("--add", [&](){taskManager.add();});
 
     if (argc == 2) {
         if (!flagManager.runFlag(argv[1])) {

@@ -3,14 +3,25 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 
+#include "external/json.hpp"
 #include "Task.h"
 
 class TaskManager {
 private:
     std::vector<Task> tasks;
+
+    void load();
+    void save() const;
 public:
-    void addTask(const std::string &title, const std::string &description);
+    TaskManager();
+    void add(
+        const int id,
+        const std::string &description,
+        const bool isCompleted = false
+    );
+    void add();
     void printTasks() const;
 };
 
