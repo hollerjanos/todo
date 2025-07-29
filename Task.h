@@ -18,6 +18,8 @@ public:
     bool getCompleted() const;
 
     nlohmann::json getObject() const;
+
+    void setId(const int id);
 };
 
 #endif

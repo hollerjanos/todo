@@ -13,7 +13,9 @@ private:
     std::vector<Task> tasks;
 
     void load();
-    void save() const;
+    void save();
+    int getNumberOfTasks() const;
+    void sort();
 public:
     TaskManager();
     void append(

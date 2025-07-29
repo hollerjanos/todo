@@ -12,7 +12,7 @@ void TaskManager::load() {
     }
 }
 
-void TaskManager::save() const {
+void TaskManager::save() {
     nlohmann::json json = nlohmann::json::array();
 
     for (const Task &task : this->tasks) {
@@ -22,6 +22,16 @@ void TaskManager::save() const {
     std::ofstream file("data.json");
     file << json.dump(4);
     file.close();
+}
+
+int TaskManager::getNumberOfTasks() const {
+    return this->tasks.size();
+}
+
+void TaskManager::sort() {
+    for (std::size_t index = 0; index < this->getNumberOfTasks(); ++index) {
+        this->tasks[index].setId(index + 1);
+    }
 }
 
 TaskManager::TaskManager() {
@@ -53,16 +63,20 @@ void TaskManager::printTasks() const {
 }
 
 void TaskManager::add() {
+    const int id = this->getNumberOfTasks() + 1;
     std::string description;
+    const bool completed = false;
 
     std::cout << "Description of the Task: ";
     std::getline(std::cin, description);
 
-    const int id = this->tasks.size() + 1;
+    this->append(id, description, completed);
 
-    this->append(id, description, false);
+    this->sort();
 
     this->save();
+
+    std::cout << "Task has been added!" << std::endl;
 }
 
 void TaskManager::remove() {
@@ -79,6 +93,8 @@ void TaskManager::remove() {
 
     if (iterator != this->tasks.end()) {
         this->tasks.erase(iterator);
+
+        this->sort();
 
         this->save();
 

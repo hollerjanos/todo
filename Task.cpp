@@ -31,3 +31,7 @@ nlohmann::json Task::getObject() const {
 
     return json;
 }
+
+void Task::setId(const int id) {
+    this->id = id;
+}
