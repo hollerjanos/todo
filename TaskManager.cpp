@@ -63,6 +63,24 @@ void TaskManager::createFileIfNotExist() const {
     file.close();
 }
 
+std::string TaskManager::inputDescription() const {
+    std::string description;
+
+    std::cout << "- Description of the task: ";
+    std::getline(std::cin, description);
+
+    return description;
+}
+
+int TaskManager::inputIndex() const {
+    int index;
+
+    std::cout << "- Index of the task: ";
+    std::cin >> index;
+
+    return --index;
+}
+
 void TaskManager::list() const {
     std::cout << "Open tasks: " << std::endl;
     for (std::size_t index = 0; index < this->getNumberOfTasks(); ++index) {
@@ -82,10 +100,7 @@ void TaskManager::list() const {
 void TaskManager::add() {
     std::cout << "Adding a new task" << std::endl;
 
-    std::string description;
-
-    std::cout << "- Description of the task: ";
-    std::getline(std::cin, description);
+    const std::string description = inputDescription();
 
     this->append(description);
 
@@ -97,12 +112,7 @@ void TaskManager::add() {
 void TaskManager::remove() {
     std::cout << "Removing an already existing task!" << std::endl;
 
-    int index;
-
-    std::cout << "Index of the task: ";
-    std::cin >> index;
-
-    index -= 1;
+    const int index = this->inputIndex();
 
     if (this->isValidIndex(index)) {
         this->tasks.erase(this->tasks.begin() + index);
@@ -118,12 +128,7 @@ void TaskManager::remove() {
 void TaskManager::close() {
     std::cout << "Closing an open task!" << std::endl;
 
-    int index;
-
-    std::cout << "Index of the task: ";
-    std::cin >> index;
-
-    index -= 1;
+    const int index = this->inputIndex();
 
     if (this->isValidIndex(index)) {
         this->tasks[index].setCompleted(true);
@@ -139,12 +144,7 @@ void TaskManager::close() {
 void TaskManager::open() {
     std::cout << "Opening an already closed task!" << std::endl;
 
-    int index;
-
-    std::cout << "Index of the task: ";
-    std::cin >> index;
-
-    index -= 1;
+    const int index = this->inputIndex();
 
     if (isValidIndex(index)) {
         this->tasks[index].setCompleted(false);

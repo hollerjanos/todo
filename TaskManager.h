@@ -21,6 +21,8 @@ private:
     void printTask(const int index, const std::string &description) const;
     bool isValidIndex(const int index) const;
     void createFileIfNotExist() const;
+    std::string inputDescription() const;
+    int inputIndex() const;
 public:
     TaskManager();
     void append(const std::string &description, const bool completed = false);
