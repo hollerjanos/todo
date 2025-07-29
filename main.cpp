@@ -3,33 +3,39 @@
 #include "FlagManager.h"
 #include "TaskManager.h"
 
-void printUsage() {
-    std::cout << "Usage:" << std::endl;
-    std::cout << std::endl;
-    std::cout << "--list\t\tList all the tasks!" << std::endl;
-    std::cout << "--add\t\tCreate a new task!" << std::endl;
-    std::cout << "--remove\tRemove a new task!" << std::endl;
-    std::cout << "--close\tClose an open task!" << std::endl;
-    std::cout << "--open\tReopen an already closed task!" << std::endl;
+void print(const std::string &text = "") {
+    std::cout << text << std::endl;
+}
+
+void help() {
+    print("Usage: todo [OPTION]");
+    print("Storing tasks for yourself!");
+    print();
+    print("  -l, --list           List all the tasks!");
+    print("  -a, --add            Create a new task!");
+    print("  -r, --remove         Remove a new task!");
+    print("  -c, --close          Close an open task!");
+    print("  -o, --open           Reopen an already closed task!");
 }
 
 int main(int argc, char *argv[]) {
     TaskManager taskManager;
 
     FlagManager flagManager;
-    flagManager.addFlag("--help", printUsage);
+    flagManager.addFlag("--help", help);
+    flagManager.addFlag("-l", [&taskManager](){taskManager.list();});
     flagManager.addFlag("--list", [&taskManager](){taskManager.list();});
+    flagManager.addFlag("-a", [&taskManager](){taskManager.add();});
     flagManager.addFlag("--add", [&taskManager](){taskManager.add();});
+    flagManager.addFlag("-r", [&taskManager](){taskManager.remove();});
     flagManager.addFlag("--remove", [&taskManager](){taskManager.remove();});
+    flagManager.addFlag("-c", [&taskManager](){taskManager.close();});
     flagManager.addFlag("--close", [&taskManager](){taskManager.close();});
+    flagManager.addFlag("-o", [&taskManager](){taskManager.open();});
     flagManager.addFlag("--open", [&taskManager](){taskManager.open();});
 
-    if (argc == 2) {
-        if (!flagManager.runFlag(argv[1])) {
-            printUsage();
-        }
-    } else {
-        printUsage();
+    if (argc != 2 || !flagManager.runFlag(argv[1])) {
+        help();
     }
 
     return 0;
