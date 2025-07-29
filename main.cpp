@@ -9,6 +9,8 @@ void printUsage() {
     std::cout << "--list\t\tList all the tasks!" << std::endl;
     std::cout << "--add\t\tCreate a new task!" << std::endl;
     std::cout << "--remove\tRemove a new task!" << std::endl;
+    std::cout << "--close\tClose an open task!" << std::endl;
+    std::cout << "--open\tReopen an already closed task!" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -16,9 +18,11 @@ int main(int argc, char *argv[]) {
 
     FlagManager flagManager;
     flagManager.addFlag("--help", printUsage);
-    flagManager.addFlag("--list", [&](){taskManager.printTasks();});
-    flagManager.addFlag("--add", [&](){taskManager.add();});
-    flagManager.addFlag("--remove", [&](){taskManager.remove();});
+    flagManager.addFlag("--list", [&taskManager](){taskManager.list();});
+    flagManager.addFlag("--add", [&taskManager](){taskManager.add();});
+    flagManager.addFlag("--remove", [&taskManager](){taskManager.remove();});
+    flagManager.addFlag("--close", [&taskManager](){taskManager.close();});
+    flagManager.addFlag("--open", [&taskManager](){taskManager.open();});
 
     if (argc == 2) {
         if (!flagManager.runFlag(argv[1])) {

@@ -1,14 +1,15 @@
 #include "TaskManager.h"
 #include "external/json.hpp"
+#include <filesystem>
 #include <string>
 
 void TaskManager::load() {
-    std::ifstream file("data.json");
+    std::ifstream file(this->fileName);
     nlohmann::json data = nlohmann::json::parse(file);
     file.close();
 
     for (const nlohmann::json &task : data) {
-        this->append(task["id"], task["description"], task["completed"]);
+        this->append(task["description"], task["completed"]);
     }
 }
 
@@ -19,7 +20,7 @@ void TaskManager::save() {
         json.push_back(task.getObject());
     }
 
-    std::ofstream file("data.json");
+    std::ofstream file(this->fileName);
     file << json.dump(4);
     file.close();
 }
@@ -28,51 +29,65 @@ int TaskManager::getNumberOfTasks() const {
     return this->tasks.size();
 }
 
-void TaskManager::sort() {
-    for (std::size_t index = 0; index < this->getNumberOfTasks(); ++index) {
-        this->tasks[index].setId(index + 1);
-    }
-}
-
 TaskManager::TaskManager() {
+    this->createFileIfNotExist();
+
     this->load();
 }
 
 void TaskManager::append(
-    const int id,
     const std::string &description,
     const bool completed
 ) {
-    this->tasks.push_back(Task(id, description, completed));
+    this->tasks.push_back(Task(description, completed));
 }
 
-void TaskManager::printTasks() const {
+void TaskManager::printTask(
+    const int index,
+    const std::string &description
+) const {
+    std::cout << index << ": " << description << std::endl;
+}
+
+bool TaskManager::isValidIndex(const int index) const {
+    return index >= 0 && index < this->getNumberOfTasks();
+}
+
+void TaskManager::createFileIfNotExist() const {
+    if (std::filesystem::exists(this->fileName)) return;
+
+    nlohmann::json json = nlohmann::json::array();
+
+    std::ofstream file(this->fileName);
+    file << json.dump(4);
+    file.close();
+}
+
+void TaskManager::list() const {
     std::cout << "Open tasks: " << std::endl;
-    for (const Task &task : this->tasks) {
-        if (!task.getCompleted()) {
-            std::cout << task.getId() << ": " << task.getDescription() << std::endl;
+    for (std::size_t index = 0; index < this->getNumberOfTasks(); ++index) {
+        if (!this->tasks[index].getCompleted()) {
+            this->printTask(index + 1, this->tasks[index].getDescription());
         }
     }
 
     std::cout << std::endl << "Completed tasks: " << std::endl;
-    for (const Task &task : this->tasks) {
-        if (task.getCompleted()) {
-            std::cout << task.getId() << ": " << task.getDescription() << std::endl;
+    for (std::size_t index = 0; index < this->getNumberOfTasks(); ++index) {
+        if (this->tasks[index].getCompleted()) {
+            this->printTask(index + 1, this->tasks[index].getDescription());
         }
     }
 }
 
 void TaskManager::add() {
-    const int id = this->getNumberOfTasks() + 1;
-    std::string description;
-    const bool completed = false;
+    std::cout << "Adding a new task" << std::endl;
 
-    std::cout << "Description of the Task: ";
+    std::string description;
+
+    std::cout << "- Description of the task: ";
     std::getline(std::cin, description);
 
-    this->append(id, description, completed);
-
-    this->sort();
+    this->append(description);
 
     this->save();
 
@@ -80,26 +95,64 @@ void TaskManager::add() {
 }
 
 void TaskManager::remove() {
-    int id;
+    std::cout << "Removing an already existing task!" << std::endl;
 
-    std::cout << "ID of the Task: ";
-    std::cin >> id;
+    int index;
 
-    std::vector<Task>::iterator iterator = std::find_if(
-        this->tasks.begin(),
-        this->tasks.end(),
-        [&id](const Task &task){return task.getId() == id;}
-    );
+    std::cout << "Index of the task: ";
+    std::cin >> index;
 
-    if (iterator != this->tasks.end()) {
-        this->tasks.erase(iterator);
+    index -= 1;
 
-        this->sort();
+    if (this->isValidIndex(index)) {
+        this->tasks.erase(this->tasks.begin() + index);
 
         this->save();
 
         std::cout << "Task has been removed!" << std::endl;
     } else {
-        std::cout << "Invalid ID given!" << std::endl;
+        std::cout << "Invalid index was given!" << std::endl;
+    }
+}
+
+void TaskManager::close() {
+    std::cout << "Closing an open task!" << std::endl;
+
+    int index;
+
+    std::cout << "Index of the task: ";
+    std::cin >> index;
+
+    index -= 1;
+
+    if (isValidIndex(index)) {
+        this->tasks[index].setCompleted(true);
+
+        this->save();
+
+        std::cout << "Task has been closed!" << std::endl;
+    } else {
+        std::cout << "Invalid index was given!" << std::endl;
+    }
+}
+
+void TaskManager::open() {
+    std::cout << "Opening an already closed task!" << std::endl;
+
+    int index;
+
+    std::cout << "Index of the task: ";
+    std::cin >> index;
+
+    index -= 1;
+
+    if (isValidIndex(index)) {
+        this->tasks[index].setCompleted(false);
+
+        this->save();
+
+        std::cout << "Task has been reopened!" << std::endl;
+    } else {
+        std::cout << "Invalid index was given!" << std::endl;
     }
 }
