@@ -10,7 +10,7 @@ Storing tasks for yourself!
 
 # Usage
 
-`todo [OPTIONS]`
+`todo [OPTION]`
 
 # Options
 
