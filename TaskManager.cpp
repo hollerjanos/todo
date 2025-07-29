@@ -125,7 +125,7 @@ void TaskManager::close() {
 
     index -= 1;
 
-    if (isValidIndex(index)) {
+    if (this->isValidIndex(index)) {
         this->tasks[index].setCompleted(true);
 
         this->save();
