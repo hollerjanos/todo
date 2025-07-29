@@ -8,6 +8,10 @@ Storing tasks for yourself!
 
 [nlohmann/json](https://github.com/nlohmann/json)
 
+# Install
+
+`sudo ln -s /full/path/to/main.out /usr/local/bin/todo`
+
 # Usage
 
 `todo [OPTION]`
