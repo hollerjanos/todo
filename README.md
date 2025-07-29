@@ -14,7 +14,7 @@ Storing tasks for yourself!
 
 # Options
 
-```bash
+```txt
 -l, --list           List all the tasks!
 -a, --add            Create a new task!
 -r, --remove         Remove a new task!
