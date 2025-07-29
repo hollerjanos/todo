@@ -4,7 +4,7 @@
 #include <string>
 
 void TaskManager::load() {
-    std::ifstream file(this->fileName);
+    std::ifstream file(this->filePath + this->fileName);
     nlohmann::json data = nlohmann::json::parse(file);
     file.close();
 
@@ -20,7 +20,7 @@ void TaskManager::save() {
         json.push_back(task.getObject());
     }
 
-    std::ofstream file(this->fileName);
+    std::ofstream file(this->filePath + this->fileName);
     file << json.dump(4);
     file.close();
 }
@@ -54,11 +54,11 @@ bool TaskManager::isValidIndex(const int index) const {
 }
 
 void TaskManager::createFileIfNotExist() const {
-    if (std::filesystem::exists(this->fileName)) return;
+    if (std::filesystem::exists(this->filePath + this->fileName)) return;
 
     nlohmann::json json = nlohmann::json::array();
 
-    std::ofstream file(this->fileName);
+    std::ofstream file(this->filePath + this->fileName);
     file << json.dump(4);
     file.close();
 }

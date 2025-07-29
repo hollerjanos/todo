@@ -4,14 +4,16 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
+
+#include <stdlib.h>
 
 #include "external/json.hpp"
 #include "Task.h"
 
 class TaskManager {
 private:
-    const std::string fileName = "data.json";
+    const std::string filePath = getenv("HOME");
+    const std::string fileName = "/.todo.json";
 
     std::vector<Task> tasks;
 
